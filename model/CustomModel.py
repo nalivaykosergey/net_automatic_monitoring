@@ -8,6 +8,8 @@ from mininet.node import CPULimitedHost
 from monitoring.Monitor import Monitor
 from topology.CustomTopology import CustomTopology
 
+from net_stats_plotter.NetStatsPlotter import NetStatsPlotter
+
 
 class CustomModel:
 
@@ -37,6 +39,7 @@ class CustomModel:
         topology = CustomTopology(self.topology_config)
         net = Mininet(topo=topology, host=CPULimitedHost, link=TCLink)
         net.start()
+        print("Сеть запущена")
         try:
             self.__configure_links()
             self.__configure_devices(net.hosts)
@@ -56,6 +59,15 @@ class CustomModel:
             monitor.net_monitoring(iperf_file, iperf_commands, qlen_file, qlen_mon_time, qlen_mon_interval)
         finally:
             net.stop()
+            print("Сеть прекратила работу.")
+            print("Строим графики.")
+
+            plotter = NetStatsPlotter(self.monitoring_config["plots_dir"], self.monitoring_config["plots_format"])
+            plotter.plot_net_stats(os.path.join(self.monitoring_config["plots_dir"],
+                                                self.monitoring_config["iperf_file_name"]))
+            plotter.plot_queue_len(os.path.join(self.monitoring_config["plots_dir"],
+                                                self.monitoring_config["queue_data_file_name"]))
+            print("Графики построены и находятся в директории {}.".format(self.monitoring_config["plots_dir"]))
 
     def __configure_links(self):
         for i in self.links_config:

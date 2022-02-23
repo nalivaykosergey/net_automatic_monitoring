@@ -4,13 +4,13 @@
         name = "h1"
         ip = "10.0.0.1"
         cmd = [
-            "sysctl -w net.ipv4.tcp_congestion_control=reno"
+            "sysctl -w net.ipv4.tcp_congestion_control=cubic"
         ]
     [devices.h2]
         name = "h2"
         ip = "10.0.0.2"
         cmd = [
-            "sysctl -w net.ipv4.tcp_congestion_control=reno"
+            "sysctl -w net.ipv4.tcp_congestion_control=cubic"
         ]
 
 # switch settings
@@ -38,13 +38,14 @@ cmd = [
 ]
 
 [monitoring]
-monitoring_time = 240
-monitoring_interval = 0.1
+monitoring_time = 300
+monitoring_interval = 0.05
 host_client = "h1"
 host_server = "h2"
 interface = "s2-eth2"
 iperf_file_name = "iperf.json"
 iperf_flags = ""
 queue_data_file_name = "qlen.data"
-plots_dir = "plots_dir_bbr"
+plots_dir = "plots_dir_cubic"
+plots_format = "pdf"
 

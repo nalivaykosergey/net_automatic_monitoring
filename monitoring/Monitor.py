@@ -4,9 +4,6 @@ from threading import Thread
 import re
 import os
 
-from monitoring.NetDataParser import parse_netstat_file, parse_queue_len
-from monitoring.NetDataPlotting import plot_net_stats, plot_queue_len
-
 
 class Monitor:
 
@@ -30,18 +27,8 @@ class Monitor:
         th2.start()
         th1.join()
         th2.join()
-        print("Мониторинг окончен. Строим графики.")
-        plot_net_stats(
-            parse_netstat_file(
-                os.path.join(self.save_dir, iperf_file)
-            ),
-            "png", self.save_dir)
-        plot_queue_len(
-            parse_queue_len(
-                os.path.join(self.save_dir, qlen_file)
-            ),
-            "png", self.save_dir)
-        print("Графики построены и находятся в директории {}.".format(self.save_dir))
+        print("Мониторинг окончен.")
+
 
     def __queue_len_monitoring(self, time=1, interval_sec_=0.1, fname="qlen.dat"):
         print("Начало мониторинга сети на интерфейсе {}. Продолжительность мониторинга: "
