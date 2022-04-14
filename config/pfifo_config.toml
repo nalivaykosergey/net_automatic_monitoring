@@ -4,13 +4,13 @@
         name = "h1"
         ip = "10.0.0.1"
         cmd = [
-            "sysctl -w net.ipv4.tcp_congestion_control=cubic"
+            "sysctl -w net.ipv4.tcp_congestion_control=reno"
         ]
     [devices.h2]
         name = "h2"
         ip = "10.0.0.2"
         cmd = [
-            "sysctl -w net.ipv4.tcp_congestion_control=cubic"
+            "sysctl -w net.ipv4.tcp_congestion_control=reno"
         ]
 
 # switch settings
@@ -33,12 +33,12 @@ cmd = [
     "tc qdisc replace dev s1-eth1 root handle 10: tbf rate 100mbit burst 50000 limit 150000",
     "tc qdisc add dev s1-eth1 parent 10: handle 20: netem loss 0.001% delay 30ms 7ms distribution normal",
     "tc qdisc replace dev s2-eth2 root handle 10: tbf rate 50mbit burst 25000 limit 75000",
-    "tc qdisc add dev s2-eth2 parent 10: handle 15: pfifo limit 30",
+    "tc qdisc add dev s2-eth2 parent 10: handle 15: pfifo limit 60",
     "tc qdisc replace dev s2-eth1 root handle 10: tbf rate 50mbit burst 25000 limit 75000"
 ]
 
 [monitoring]
-monitoring_time = 300
+monitoring_time = 60
 monitoring_interval = 0.05
 host_client = "h1"
 host_server = "h2"
@@ -46,6 +46,5 @@ interface = "s2-eth2"
 iperf_file_name = "iperf.json"
 iperf_flags = ""
 queue_data_file_name = "qlen.data"
-plots_dir = "plots_dir_cubic"
-plots_format = "pdf"
+plots_dir = "plots_dir_first"
 

@@ -2,7 +2,6 @@
 
 import argparse
 from model.CustomModel import CustomModel
-from topology.CustomTopology import CustomTopology
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

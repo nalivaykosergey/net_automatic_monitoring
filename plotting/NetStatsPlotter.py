@@ -1,22 +1,13 @@
 import json
 import matplotlib.pyplot as plt
 
-
 class NetStatsPlotter:
-
     def __init__(self, save_folder, plot_format):
-        self.__save_folder = save_folder
-        self.__plot_format = plot_format
-
-    def set_save_folder(self, save_folder):
-        self.__save_folder = save_folder
-
-    def set_plot_format(self, plot_format):
-        self.__plot_format = plot_format
+        self.save_folder = save_folder
+        self.plot_format = plot_format
 
     def plot_net_stats(self, net_data_file):
-        stats = self.__parse_net_stats_file(net_data_file)
-        x_stats, y_stats = stats
+        x_stats, y_stats = self.__parse_net_stats_file(net_data_file)
         for i in y_stats:
             plt.plot(x_stats, y_stats[i][0], 'k', linewidth=1)
             plt.grid()
@@ -24,19 +15,18 @@ class NetStatsPlotter:
             plt.xlabel(y_stats[i][1]["x"])
             plt.ylabel(y_stats[i][1]["y"])
             plt.title(y_stats[i][1]["title"])
-            plt.savefig("{}/{}.{}".format(self.__save_folder, i, self.__plot_format))
+            plt.savefig("{}/{}.{}".format(self.save_folder, i, self.plot_format))
             plt.clf()
 
     def plot_queue_len(self, qlen_data_file):
-        stats = self.__parse_queue_len_data_file(qlen_data_file)
-        x_stats, y_stats = stats
+        x_stats, y_stats = self.__parse_queue_len_data_file(qlen_data_file)
         plt.plot(x_stats, y_stats, 'k', linewidth=1)
         plt.grid()
         plt.xlim(xmin=0, xmax=x_stats[-1])
         plt.xlabel("Время (с)")
         plt.ylabel("Размер очереди (пакеты)")
         plt.title("Размер очереди в течении времени")
-        plt.savefig("{}/queue_len.{}".format(self.__save_folder, self.__plot_format))
+        plt.savefig("{}/queue_len.{}".format(self.save_folder, self.plot_format))
 
     def __parse_net_stats_file(self, net_data_file):
         net_data = open(net_data_file, "r")
